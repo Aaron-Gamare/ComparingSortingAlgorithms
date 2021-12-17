@@ -1,3 +1,6 @@
+Chart.defaults.plugins.legend.display = false;
+Chart.defaults.scale.grid.display = false;
+
 const plugin = {
     id: 'custom_canvas_background_color',
     beforeDraw: (chart) => {
@@ -32,24 +35,11 @@ let barChart = new Chart(bubbleChart, {
     },
     plugins: [plugin],
     options: {
-        plugins: {
-            legend: {
-                display: false
-            }
-        },
         scales: {
             xAxes: {
                 ticks: {
                     display:false
-                },
-                grid: {
-                    display: false
                 }
-            },
-            yAxes: {
-                grid: {
-                    display: false
-                }   
             }
         }
     }
