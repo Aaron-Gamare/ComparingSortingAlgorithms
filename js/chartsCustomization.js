@@ -175,11 +175,12 @@ var barChart5 = new Chart(countingChart, {
     }
 });
 
-
+//Randomize dataset on reload page
 document.addEventListener('DOMContentLoaded', function() {
     randomizeDataset();
 }, false);
 
+//randomize dataset with 250 numbers with range 0 - 1000
 function randomizeDataset() {
     for(let i = 0; i < 250; i++) {
         let x = Math.floor(Math.random()*1000);
@@ -203,6 +204,7 @@ function randomizeDataset() {
     barChart4.update();
     barChart5.update();
 }
+//upload dataset
 function uploadDataset() {
     //use map function to 
 }
