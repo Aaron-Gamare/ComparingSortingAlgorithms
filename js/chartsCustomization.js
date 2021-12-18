@@ -202,3 +202,27 @@ function refreshCharts() {
 function uploadDataset() {
     //use map function to 
 }
+
+function bubbleSort() {
+
+}
+
+function mergeSort() {
+
+}
+
+function insertionSort() {
+
+}
+
+function selectionSort() {
+
+}
+
+function quickSort() {
+
+}
+
+function countingSort() {
+
+}
