@@ -187,6 +187,10 @@ function randomizeDataset() {
         barChart4.data.labels[i] = x;
         barChart5.data.labels[i] = x;
     }
+    refreshCharts();
+}
+
+function refreshCharts() {
     barChart0.update();
     barChart1.update();
     barChart2.update();
