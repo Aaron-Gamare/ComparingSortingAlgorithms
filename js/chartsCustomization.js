@@ -203,12 +203,22 @@ function uploadDataset() {
     //use map function to 
 }
 
-function bubbleSort() {
 
+function bubbleSort() {
+    let temparray = [];
+    for(let i = 0; i < barChart0.data.datasets[0].data.length; i++) {
+        for(let j = 0; j < (barChart0.data.datasets[0].data.length - i - 1); j++) {
+            if(sortArray[j] > sortArray[j + 1]) {
+                let temp = sortArray[j];
+                sortArray[j] = sortArray[j + 1];
+                sortArray[j + 1] = temp;
+            }
+        }
+    }
 }
 
 function mergeSort() {
-
+    
 }
 
 function insertionSort() {
