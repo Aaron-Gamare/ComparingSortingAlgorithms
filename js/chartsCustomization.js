@@ -205,16 +205,17 @@ function uploadDataset() {
 
 
 function bubbleSort() {
-    let temparray = [];
-    for(let i = 0; i < barChart0.data.datasets[0].data.length; i++) {
-        for(let j = 0; j < (barChart0.data.datasets[0].data.length - i - 1); j++) {
-            if(sortArray[j] > sortArray[j + 1]) {
-                let temp = sortArray[j];
-                sortArray[j] = sortArray[j + 1];
-                sortArray[j + 1] = temp;
+    let barChart0_data = barChart0.data.datasets[0].data;
+    for(let i = 0; i < barChart0_data.length; i++) {
+        for(let j = 0; j < (barChart0_data.length - i - 1); j++) {
+            if(barChart0_data[j] > barChart0_data[j + 1]) {
+                let temp = barChart0_data[j];
+                barChart0_data[j] = barChart0_data[j + 1];
+                barChart0_data[j + 1] = temp;
             }
         }
     }
+
 }
 
 function mergeSort() {
