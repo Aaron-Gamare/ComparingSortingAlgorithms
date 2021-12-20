@@ -218,8 +218,29 @@ function bubbleSort() {
 
 }
 
+//mergeSort helper function
+function merger(left_subarray, right_subarray) {
+    let temparr = []
+    while(left_subarray.length && right_subarray.length) {
+        if(left_subarray[0] < right_subarray[0]) {
+            temparr.push(left_subarray.shift())
+        } else {
+            temparr.push(right_subarray.shift())
+        }
+    }
+
+    return [...temparr, ...left_subarray, ...right_subarray]
+}
+
+
 function mergeSort() {
-    
+    const half_length = barChart1.data.datasets[0].data.length/2;
+    //base case
+    if(barChart1.data.datasets[0].data.length < 2) {
+        return barChart1.data.datasets[0].data
+    }
+    const leftside = barChart1.data.datasets[0].data.splice(0,half_length)
+    return merger(mergeSort(leftside), mergeSort(barChart1.data.datasets[0].data))
 }
 
 function insertionSort() {
