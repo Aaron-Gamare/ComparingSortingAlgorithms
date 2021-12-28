@@ -2,8 +2,6 @@ Chart.defaults.plugins.legend.display = false;
 Chart.defaults.scale.grid.display = false;
 Chart.defaults.scale.ticks.display = false;
 
-var size = [window.width,window.height]
-
 const plugin = {
     id: 'custom_canvas_background_color',
     beforeDraw: (chart) => {
@@ -180,12 +178,12 @@ function randomizeDataset() {
         barChart3.data.datasets[0].data[i] = x;
         barChart4.data.datasets[0].data[i] = x;
         barChart5.data.datasets[0].data[i] = x;
-        barChart0.data.labels[i] = x;
-        barChart1.data.labels[i] = x;
-        barChart2.data.labels[i] = x;
-        barChart3.data.labels[i] = x;
-        barChart4.data.labels[i] = x;
-        barChart5.data.labels[i] = x;
+        barChart0.data.labels[i] = i+1;
+        barChart1.data.labels[i] = i+1;
+        barChart2.data.labels[i] = i+1;
+        barChart3.data.labels[i] = i+1;
+        barChart4.data.labels[i] = i+1;
+        barChart5.data.labels[i] = i+1;
     }
     refreshCharts();
 }
@@ -200,11 +198,47 @@ function refreshCharts() {
 }
 //upload dataset
 function uploadDataset() {
-    //use map function to 
+
 }
 
+function bubbleSort2() {  
+    let labels = barChart0.data.labels;
+    let data = barChart0.data.datasets[0].data;
+    let colors = barChart0.data.datasets[0].backgroundColor;
+    let swapped;
+    let timeout = 0;
+    do {
+      swapped = false;
+      for (let i = 0; i < data.length; i++) {
+        if (data[i] > data[i + 1]) {        
+          swap(labels, i);
+          swap(data, i);
+          swap(colors, i);
+          timeout += 25;
+          this.updateChartDelayed(labels.slice(0), data.slice(0), colors.slice(0), timeout);
+          swapped = true;
+        }
+      }
+    } while (swapped);
+  }
+  
+  function swap(arr, i) {
+    let tmp = arr[i];
+    arr[i] = arr[i + 1];
+    arr[i + 1] = tmp;
+  }
+  
+  function updateChartDelayed(labels, data, colors, timeout) {
+    setTimeout(() => {
+        barChart0.data.labels = labels;
+        barChart0.data.datasets[0].data = data;
+        barChart0.data.datasets[0].backgroundColor = colors;
+        barChart0.update('none');
+    }, timeout);
+  }
 
 function bubbleSort() {
+    let timeout = 0;
     let barChart0_data = barChart0.data.datasets[0].data;
     for(let i = 0; i < barChart0_data.length; i++) {
         for(let j = 0; j < (barChart0_data.length - i - 1); j++) {
@@ -212,24 +246,29 @@ function bubbleSort() {
                 let temp = barChart0_data[j];
                 barChart0_data[j] = barChart0_data[j + 1];
                 barChart0_data[j + 1] = temp;
+                timeout += 50;
+                //barChart0.update();
+                setTimeout(() => {
+                    barChart0.update();
+                  }, timeout);
             }
         }
     }
-
 }
+
 
 //mergeSort helper function
 function merger(left_subarray, right_subarray) {
     let temparr = []
     while(left_subarray.length && right_subarray.length) {
         if(left_subarray[0] < right_subarray[0]) {
-            temparr.push(left_subarray.shift())
+            temparr.push(left_subarray.shift());
         } else {
-            temparr.push(right_subarray.shift())
+            temparr.push(right_subarray.shift());
         }
     }
 
-    return [...temparr, ...left_subarray, ...right_subarray]
+    return [...temparr, ...left_subarray, ...right_subarray];
 }
 
 
@@ -237,10 +276,10 @@ function mergeSort() {
     const half_length = barChart1.data.datasets[0].data.length/2;
     //base case
     if(barChart1.data.datasets[0].data.length < 2) {
-        return barChart1.data.datasets[0].data
+        return barChart1.data.datasets[0].data;
     }
-    const leftside = barChart1.data.datasets[0].data.splice(0,half_length)
-    return merger(mergeSort(leftside), mergeSort(barChart1.data.datasets[0].data))
+    const leftside = barChart1.data.datasets[0].data.splice(0,half_length);
+    return merger(mergeSort(leftside), mergeSort(barChart1.data.datasets[0].data));
 }
 
 function insertionSort() {
@@ -257,4 +296,12 @@ function quickSort() {
 
 function countingSort() {
 
+}
+
+async function bubbleSortingChart() {
+
+}
+
+function sortAllAlgorithms() {
+    setTimeout(() => bubbleSort2(), 1000);
 }
