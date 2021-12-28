@@ -199,45 +199,12 @@ function refreshCharts() {
 //upload dataset
 function uploadDataset() {
 
-}
+} 
 
-function bubbleSort2() {  
+function bubbleSort() {
     let labels = barChart0.data.labels;
     let data = barChart0.data.datasets[0].data;
     let colors = barChart0.data.datasets[0].backgroundColor;
-    let swapped;
-    let timeout = 0;
-    do {
-      swapped = false;
-      for (let i = 0; i < data.length; i++) {
-        if (data[i] > data[i + 1]) {        
-          swap(labels, i);
-          swap(data, i);
-          swap(colors, i);
-          timeout += 25;
-          this.updateChartDelayed(labels.slice(0), data.slice(0), colors.slice(0), timeout);
-          swapped = true;
-        }
-      }
-    } while (swapped);
-  }
-  
-  function swap(arr, i) {
-    let tmp = arr[i];
-    arr[i] = arr[i + 1];
-    arr[i + 1] = tmp;
-  }
-  
-  function updateChartDelayed(labels, data, colors, timeout) {
-    setTimeout(() => {
-        barChart0.data.labels = labels;
-        barChart0.data.datasets[0].data = data;
-        barChart0.data.datasets[0].backgroundColor = colors;
-        barChart0.update('none');
-    }, timeout);
-  }
-
-function bubbleSort() {
     let timeout = 0;
     let barChart0_data = barChart0.data.datasets[0].data;
     for(let i = 0; i < barChart0_data.length; i++) {
@@ -246,16 +213,21 @@ function bubbleSort() {
                 let temp = barChart0_data[j];
                 barChart0_data[j] = barChart0_data[j + 1];
                 barChart0_data[j + 1] = temp;
-                timeout += 50;
-                //barChart0.update();
-                setTimeout(() => {
-                    barChart0.update();
-                  }, timeout);
+                timeout += 25;
+                this.updateChartDelayed(labels.slice(0), data.slice(0), colors.slice(0), timeout);
             }
         }
     }
 }
 
+function updateChartDelayed(labels, data, colors, timeout) {
+    setTimeout(() => {
+        barChart0.data.labels = labels;
+        barChart0.data.datasets[0].data = data;
+        barChart0.data.datasets[0].backgroundColor = colors;
+        barChart0.update('none');
+    }, timeout);
+}
 
 //mergeSort helper function
 function merger(left_subarray, right_subarray) {
@@ -303,5 +275,5 @@ async function bubbleSortingChart() {
 }
 
 function sortAllAlgorithms() {
-    setTimeout(() => bubbleSort2(), 1000);
+    setTimeout(() => bubbleSort(), 1000);
 }
