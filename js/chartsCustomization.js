@@ -201,10 +201,7 @@ function uploadDataset() {
 
 } 
 
-function bubbleSort() {
-    let labels = barChart0.data.labels;
-    let data = barChart0.data.datasets[0].data;
-    let colors = barChart0.data.datasets[0].backgroundColor;
+function bubbleSort(timeoutval) {
     let timeout = 0;
     let barChart0_data = barChart0.data.datasets[0].data;
     for(let i = 0; i < barChart0_data.length; i++) {
@@ -213,18 +210,16 @@ function bubbleSort() {
                 let temp = barChart0_data[j];
                 barChart0_data[j] = barChart0_data[j + 1];
                 barChart0_data[j + 1] = temp;
-                timeout += 25;
-                this.updateChartDelayed(labels.slice(0), data.slice(0), colors.slice(0), timeout);
+                timeout += timeoutval;
+                this.updateChartDelayed(barChart0_data.slice(0), timeout);
             }
         }
     }
 }
 
-function updateChartDelayed(labels, data, colors, timeout) {
+function updateChartDelayed(data, timeout) {
     setTimeout(() => {
-        barChart0.data.labels = labels;
         barChart0.data.datasets[0].data = data;
-        barChart0.data.datasets[0].backgroundColor = colors;
         barChart0.update('none');
     }, timeout);
 }
@@ -275,5 +270,5 @@ async function bubbleSortingChart() {
 }
 
 function sortAllAlgorithms() {
-    setTimeout(() => bubbleSort(), 1000);
+    setTimeout(() => bubbleSort(5), 1000);
 }
