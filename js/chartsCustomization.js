@@ -185,6 +185,12 @@ function randomizeDataset() {
         barChart4.data.labels[i] = i+1;
         barChart5.data.labels[i] = i+1;
     }
+    barChart0.data.datasets[0].backgroundColor='#FF4B2B';
+    barChart1.data.datasets[0].backgroundColor='#FF4B2B';
+    barChart2.data.datasets[0].backgroundColor='#FF4B2B';
+    barChart3.data.datasets[0].backgroundColor='#FF4B2B';
+    barChart4.data.datasets[0].backgroundColor='#FF4B2B';
+    barChart5.data.datasets[0].backgroundColor='#FF4B2B';
     refreshCharts();
 }
 
@@ -215,6 +221,10 @@ function bubbleSort(timeoutval) {
             }
         }
     }
+    setTimeout(() => {
+        barChart0.data.datasets[0].backgroundColor = '#43cea2';
+        barChart0.update();
+    }, timeout);
 }
 
 function updateChartDelayed(data, timeout) {
