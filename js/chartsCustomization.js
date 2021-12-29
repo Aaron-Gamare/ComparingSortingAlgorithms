@@ -207,6 +207,21 @@ function uploadDataset() {
 
 } 
 
+//called by all sorting functions to update Chart with a set timeout to show animation of moving columns
+function updateChartDelayed(Chart, data, timeout) {
+    setTimeout(() => {
+        Chart.data.datasets[0].data = data;
+        Chart.update('none');
+    }, timeout);
+}
+
+function updateGreenColor(Chart, timeout) {
+    setTimeout(() => {
+        Chart.data.datasets[0].backgroundColor = '#43cea2';
+        Chart.update();
+    }, timeout);
+}
+
 function bubbleSort(timeoutval) {
     let timeout = 0;
     let barChart0_data = barChart0.data.datasets[0].data;
@@ -217,22 +232,14 @@ function bubbleSort(timeoutval) {
                 barChart0_data[j] = barChart0_data[j + 1];
                 barChart0_data[j + 1] = temp;
                 timeout += timeoutval;
-                this.updateChartDelayed(barChart0_data.slice(0), timeout);
+                this.updateChartDelayed(barChart0, barChart0_data.slice(0), timeout);
             }
         }
     }
-    setTimeout(() => {
-        barChart0.data.datasets[0].backgroundColor = '#43cea2';
-        barChart0.update();
-    }, timeout);
+    updateGreenColor(barChart0, timeout);
 }
 
-function updateChartDelayed(data, timeout) {
-    setTimeout(() => {
-        barChart0.data.datasets[0].data = data;
-        barChart0.update('none');
-    }, timeout);
-}
+
 
 //mergeSort helper function
 function merger(left_subarray, right_subarray) {
@@ -280,5 +287,6 @@ async function bubbleSortingChart() {
 }
 
 function sortAllAlgorithms() {
+    //document.getElementById(bubbletimeoutput).innerHTML = "Paragraph Changed!";
     setTimeout(() => bubbleSort(5), 1000);
 }
