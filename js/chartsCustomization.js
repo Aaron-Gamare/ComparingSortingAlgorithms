@@ -239,40 +239,39 @@ function bubbleSort(timeoutval) {
 
 
 //mergeSort helper function
-function merge(left, right) {
+function merge(left, right, timeoutval) {
     let arr = []
     let timeout = 0;
+    let indexshift = left.length+right.length;
     // Break out of loop if any one of the array gets empty
     while (left.length && right.length) {
         // Pick the smaller among the smallest element of left and right sub arrays 
-        timeout += 5;
+        timeout += timeoutval;
         if (left[0] < right[0]) {
             arr.push(left.shift())  
         } else {
             arr.push(right.shift()) 
         }
-        barChart1.data.datasets[0].data = [ ...arr, ...left, ...right ];
+        barChart1.data.datasets[0].data = [ ...arr, ...left, ...right];
         this.updateChartDelayed(barChart1, barChart1.data.datasets[0].data, timeout);
     }
-    
-    // Concatenating the leftover elements
-    // (in case we didn't go through the entire left or right array)
-    updateGreenColor(barChart1, timeout);
+    updateGreenColor(barChart1, timeoutval)
     return [ ...arr, ...left, ...right ]
 }
 
 
-function mergeSort(array) {
-    
+function mergeSort(array, timeoutval) {
     const half_length = array.length/2;
-    
     //base case
     if(array.length < 2) {
         return array;
     }
     //keep on splitting array in half 
     const leftside = array.splice(0,half_length);
-    return merge(mergeSort(leftside),mergeSort(array))
+    //updateGreenColor(barChart1, timeout);
+    return merge(mergeSort(leftside),mergeSort(array), timeoutval)
+    
+    //return temparr;
 }
 
 function insertionSort() {
@@ -298,7 +297,7 @@ function sortAllAlgorithms() {
     document.getElementById('selectiontimeoutput').innerHTML = "04:21";
     document.getElementById('quicktimeoutput').innerHTML = "04:21";
     document.getElementById('countingtimeoutput').innerHTML = "04:21";
-    setTimeout(() => barChart1.data.datasets[0].data = mergeSort(barChart1.data.datasets[0].data), 0);
-    setTimeout(() => bubbleSort(5), 0);
+    setTimeout(() => mergeSort(barChart1.data.datasets[0].data, 100), 0);
+    setTimeout(() => bubbleSort(10), 0);
     
 }
