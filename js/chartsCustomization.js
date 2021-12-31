@@ -1,6 +1,7 @@
 Chart.defaults.plugins.legend.display = false;
 Chart.defaults.scale.grid.display = false;
 Chart.defaults.scale.ticks.display = false;
+var timeouts = []
 
 const plugin = {
     id: 'custom_canvas_background_color',
@@ -167,6 +168,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //randomize dataset with 100 numbers with range 0 - 1000
 function randomizeDataset() {
+    for (var i = 0; i < timeouts.length; i++) {
+        clearTimeout(timeouts[i]);
+    }
+    timeouts = [];
+
     for(let i = 0; i < 100; i++) {
         let x = Math.floor(Math.random()*1000);
         barChart0.data.datasets[0].data[i] = x;
@@ -206,17 +212,17 @@ function uploadDataset() {
 
 //called by all sorting functions to update Chart with a set timeout to show animation of moving columns
 function updateChartDelayed(Chart, data, timeout) {
-    setTimeout(() => {
+    timeouts.push(setTimeout(() => {
         Chart.data.datasets[0].data = data;
         Chart.update('none');
-    }, timeout);
+    }, timeout));
 }
 
 function updateGreenColor(Chart, timeout) {
-    setTimeout(() => {
+    timeouts.push(setTimeout(() => {
         Chart.data.datasets[0].backgroundColor = '#43cea2';
         Chart.update();
-    }, timeout);
+    }, timeout))
 }
 
 function bubbleSort(timeoutval) {
@@ -297,7 +303,14 @@ function sortAllAlgorithms() {
     document.getElementById('selectiontimeoutput').innerHTML = "04:21";
     document.getElementById('quicktimeoutput').innerHTML = "04:21";
     document.getElementById('countingtimeoutput').innerHTML = "04:21";
-    setTimeout(() => mergeSort(barChart1.data.datasets[0].data, 100), 0);
+    
+    for (var i = 0; i < timeouts.length; i++) {
+        clearTimeout(timeouts[i]);
+    }
+    timeouts = [];
+    
     setTimeout(() => bubbleSort(10), 0);
+    setTimeout(() => mergeSort(barChart1.data.datasets[0].data, 1000), 0);
+    
     
 }
