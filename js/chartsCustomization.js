@@ -172,8 +172,8 @@ function randomizeDataset() {
         clearTimeout(timeouts[i]);
     }
     timeouts = [];
-
-    for(let i = 0; i < 100; i++) {
+    mergetimeout = 0;
+    for(let i = 0; i < 10; i++) {
         let x = Math.floor(Math.random()*1000);
         barChart0.data.datasets[0].data[i] = x;
         barChart1.data.datasets[0].data[i] = x;
@@ -243,26 +243,24 @@ function bubbleSort(timeoutval) {
 }
 
 
-
+var mergetimeout = 0;
 //mergeSort helper function
-function merge(left, right, timeoutval) {
-    let arr = []
-    let timeout = 0;
-    let indexshift = left.length+right.length;
-    // Break out of loop if any one of the array gets empty
-    while (left.length && right.length) {
-        // Pick the smaller among the smallest element of left and right sub arrays 
-        timeout += timeoutval;
-        if (left[0] < right[0]) {
-            arr.push(left.shift())  
+function merge(left_subarray, right_subarray) {
+    let temparr = []
+    let length = barChart1.data.datasets[0].data.length
+    while (left_subarray.length && right_subarray.length) { 
+        //mergetimeout += timeoutval;
+        if (left_subarray[0] < right_subarray[0]) {
+            temparr.push(left_subarray.shift())
         } else {
-            arr.push(right.shift()) 
+            temparr.push(right_subarray.shift())
         }
-        barChart1.data.datasets[0].data = [ ...arr, ...left, ...right];
-        this.updateChartDelayed(barChart1, barChart1.data.datasets[0].data, timeout);
+        let indexshift = left_subarray.length + right_subarray.length + temparr.length;
+        barChart1.data.datasets[0].data = [ ...temparr, ...left_subarray, ...right_subarray, ...barChart1.data.datasets[0].data.slice(indexshift,length-1)];
+        this.updateChartDelayed(barChart1, barChart1.data.datasets[0].data, mergetimeout);
     }
-    updateGreenColor(barChart1, timeoutval)
-    return [ ...arr, ...left, ...right ]
+    //updateGreenColor(barChart1, timeoutval)
+    return [ ...temparr, ...left_subarray, ...right_subarray ]
 }
 
 
@@ -275,9 +273,10 @@ function mergeSort(array, timeoutval) {
     //keep on splitting array in half 
     const leftside = array.splice(0,half_length);
     //updateGreenColor(barChart1, timeout);
-    return merge(mergeSort(leftside),mergeSort(array), timeoutval)
-    
-    //return temparr;
+    mergetimeout+=timeoutval
+    let leftarray = mergeSort(leftside, mergetimeout)
+    let rightarray = mergeSort(array, mergetimeout)
+    return merge(leftarray,rightarray)
 }
 
 function insertionSort() {
@@ -308,7 +307,8 @@ function sortAllAlgorithms() {
         clearTimeout(timeouts[i]);
     }
     timeouts = [];
-    
+    mergetimeout = 0;
+
     setTimeout(() => bubbleSort(10), 0);
     setTimeout(() => mergeSort(barChart1.data.datasets[0].data, 1000), 0);
     
