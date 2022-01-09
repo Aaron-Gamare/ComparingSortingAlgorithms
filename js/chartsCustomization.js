@@ -2,6 +2,8 @@ Chart.defaults.plugins.legend.display = false;
 Chart.defaults.scale.grid.display = false;
 Chart.defaults.scale.ticks.display = false;
 var timeouts = []
+var mergetimeout = 0;
+var mergecounter = 0;
 
 const plugin = {
     id: 'custom_canvas_background_color',
@@ -173,7 +175,8 @@ function randomizeDataset() {
     }
     timeouts = [];
     mergetimeout = 0;
-    for(let i = 0; i < 10; i++) {
+    mergecounter = 0;
+    for(let i = 0; i < 101; i++) {
         let x = Math.floor(Math.random()*1000);
         barChart0.data.datasets[0].data[i] = x;
         barChart1.data.datasets[0].data[i] = x;
@@ -194,10 +197,6 @@ function randomizeDataset() {
     barChart3.data.datasets[0].backgroundColor='#FF4B2B';
     barChart4.data.datasets[0].backgroundColor='#FF4B2B';
     barChart5.data.datasets[0].backgroundColor='#FF4B2B';
-    refreshCharts();
-}
-
-function refreshCharts() {
     barChart0.update();
     barChart1.update();
     barChart2.update();
@@ -205,6 +204,7 @@ function refreshCharts() {
     barChart4.update();
     barChart5.update();
 }
+
 //upload dataset
 function uploadDataset() {
 
@@ -225,6 +225,7 @@ function updateGreenColor(Chart, timeout) {
     }, timeout))
 }
 
+
 function bubbleSort(timeoutval) {
     let timeout = 0;
     let barChart0_data = barChart0.data.datasets[0].data;
@@ -243,40 +244,49 @@ function bubbleSort(timeoutval) {
 }
 
 
-var mergetimeout = 0;
+
 //mergeSort helper function
 function merge(left_subarray, right_subarray) {
     let temparr = []
-    let length = barChart1.data.datasets[0].data.length
+    let length = barChart1.data.datasets[0].data.length;
+    let indexshift = left_subarray.length + right_subarray.length + temparr.length;
+    mergecounter++;
     while (left_subarray.length && right_subarray.length) { 
-        //mergetimeout += timeoutval;
         if (left_subarray[0] < right_subarray[0]) {
             temparr.push(left_subarray.shift())
         } else {
             temparr.push(right_subarray.shift())
         }
-        let indexshift = left_subarray.length + right_subarray.length + temparr.length;
-        barChart1.data.datasets[0].data = [ ...temparr, ...left_subarray, ...right_subarray, ...barChart1.data.datasets[0].data.slice(indexshift,length-1)];
-        this.updateChartDelayed(barChart1, barChart1.data.datasets[0].data, mergetimeout);
+        mergetimeout+=30
+        
+        if(mergecounter < 50) {
+            barChart1.data.datasets[0].data = [ ...temparr, ...left_subarray, ...right_subarray, ...barChart1.data.datasets[0].data.slice(indexshift,length)];
+            this.updateChartDelayed(barChart1, barChart1.data.datasets[0].data, mergetimeout);
+            
+        } else if(mergecounter > 99) {
+            barChart1.data.datasets[0].data = [ ...temparr, ...left_subarray, ...right_subarray, ...barChart1.data.datasets[0].data.slice(indexshift,length)];
+            this.updateChartDelayed(barChart1, barChart1.data.datasets[0].data, mergetimeout);
+            
+        }
+        else {
+            barChart1.data.datasets[0].data = [ ...barChart1.data.datasets[0].data.slice(0,49), ...temparr, ...left_subarray, ...right_subarray, ...barChart1.data.datasets[0].data.slice(indexshift+49,length)];
+            this.updateChartDelayed(barChart1, barChart1.data.datasets[0].data, mergetimeout);
+        }
     }
-    //updateGreenColor(barChart1, timeoutval)
+    if(mergecounter > 99) {
+        updateGreenColor(barChart1, mergetimeout);
+    }
     return [ ...temparr, ...left_subarray, ...right_subarray ]
 }
 
 
-function mergeSort(array, timeoutval) {
+function mergeSort(array) {
     const half_length = array.length/2;
-    //base case
     if(array.length < 2) {
         return array;
     }
-    //keep on splitting array in half 
     const leftside = array.splice(0,half_length);
-    //updateGreenColor(barChart1, timeout);
-    mergetimeout+=timeoutval
-    let leftarray = mergeSort(leftside, mergetimeout)
-    let rightarray = mergeSort(array, mergetimeout)
-    return merge(leftarray,rightarray)
+    return merge(mergeSort(leftside),mergeSort(array))
 }
 
 function insertionSort() {
@@ -308,9 +318,8 @@ function sortAllAlgorithms() {
     }
     timeouts = [];
     mergetimeout = 0;
-
+    mergecounter = 0;
+    mergeData = JSON.parse(JSON.stringify(barChart1.data.datasets[0].data));
     setTimeout(() => bubbleSort(10), 0);
-    setTimeout(() => mergeSort(barChart1.data.datasets[0].data, 1000), 0);
-    
-    
+    setTimeout(() => mergeSort(mergeData, 10), 0);
 }
