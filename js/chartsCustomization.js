@@ -321,31 +321,7 @@ function insertionSort(timeoutval) {
     updateGreenColor(barChart2, timeout);
 }
 
-function selectionSort(timeoutval) {
-    let i, j, min_idx;
-    let timeout = 0;
-    // One by one move boundary of unsorted subarray
-    for (i = 0; i < barChart5.data.datasets[0].data.length-1; i++) {
-        // Find the minimum element in unsorted array
-        min_idx = i;
-        //timeout+=timeoutval;
-        for (j = i + 1; j < barChart5.data.datasets[0].data.length; j++) {
-            if (barChart5.data.datasets[0].data[j] < barChart5.data.datasets[0].data[min_idx]) {
-                min_idx = j;    
-                
-            }
-            timeout += timeoutval;
-        }
-    
-        // Swap the found minimum element with the first element
-        let temp = barChart5.data.datasets[0].data[min_idx];
-        barChart5.data.datasets[0].data[min_idx] = barChart5.data.datasets[0].data[i];
-        barChart5.data.datasets[0].data[i] = temp;
-        //timeout += timeoutval;
-        this.updateChartDelayed(barChart5, barChart5.data.datasets[0].data.slice(0), timeout);
-    }
-    this.updateGreenColor(barChart5, timeout);
-}
+
 
 var radixtimeout = 0;
 function getMax(arr,n) {
@@ -410,6 +386,30 @@ function quickSort() {
 
 }
 
+function selectionSort(timeoutval) {
+    let i, j, min_idx;
+    let timeout = 0;
+    for (i = 0; i < barChart5.data.datasets[0].data.length-1; i++) {
+        min_idx = i;
+        for (j = i + 1; j < barChart5.data.datasets[0].data.length; j++) {
+            if (barChart5.data.datasets[0].data[j] < barChart5.data.datasets[0].data[min_idx]) {
+                min_idx = j;
+                
+            }
+            
+        }
+    
+        // Swap the found minimum element with the first element
+        let temp = barChart5.data.datasets[0].data[min_idx];
+        barChart5.data.datasets[0].data[min_idx] = barChart5.data.datasets[0].data[i];
+        barChart5.data.datasets[0].data[i] = temp;
+        //timeout += timeoutval;
+        timeout += timeoutval;
+        this.updateChartDelayed(barChart5, barChart5.data.datasets[0].data.slice(0), timeout);
+    }
+    this.updateGreenColor(barChart5, timeout);
+}
+
 function sortAllAlgorithms() {
     document.getElementById('bubbletimeoutput').innerHTML = "&nbsp";
     document.getElementById('mergetimeoutput').innerHTML = "&nbsp";
@@ -429,6 +429,6 @@ function sortAllAlgorithms() {
     setTimeout(() => bubbleSort(10), 0);
     setTimeout(() => mergeSort(mergeData, 10), 0);
     setTimeout(() => insertionSort(10),0);
-    setTimeout(() => selectionSort(10),0);
+    setTimeout(() => selectionSort(200),0);
     setTimeout(() => radixSort(10),0);
 }
