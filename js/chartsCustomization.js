@@ -382,8 +382,64 @@ function radixSort(timeoutval) {
     this.updateGreenColor(barChart3, radixtimeout);
 }
 
-function quickSort() {
+function partition(arr, start, end, timeout, timeoutval){
+    // Taking the last element as the pivot
+    const pivotValue = arr[end];
+    let pivotIndex = start; 
+    for (let i = start; i < end; i++) {
+        if (arr[i] < pivotValue) {
+        // Swapping elements
+        [arr[i], arr[pivotIndex]] = [arr[pivotIndex], arr[i]];
+        // Moving to next element
+        pivotIndex++;
+        
+        }
+        timeout += timeoutval;
+    }
+    
+    // Putting the pivot value in the middle
+    [arr[pivotIndex], arr[end]] = [arr[end], arr[pivotIndex]] 
+    return pivotIndex;
+};
 
+function quickSort(timeoutval) {
+    // Creating an array that we'll use as a stack, using the push() and pop() functions
+    stack = [];
+    let timeout = 0;
+    // Adding the entire initial array as an "unsorted subarray"
+    stack.push(0);
+    stack.push(barChart4.data.datasets[0].data.length - 1);
+    
+    // There isn't an explicit peek() function
+    // The loop repeats as long as we have unsorted subarrays
+    while(stack[stack.length - 1] >= 0){
+        timeout += timeoutval;
+        // Extracting the top unsorted subarray
+    	end = stack.pop();
+        start = stack.pop();
+        
+        pivotIndex = partition(barChart4.data.datasets[0].data, start, end, timeout, timeoutval);
+        this.updateChartDelayed(barChart4, barChart4.data.datasets[0].data.slice(0), timeout);
+        // If there are unsorted elements to the "left" of the pivot,
+        // we add that subarray to the stack so we can sort it later
+        if (pivotIndex - 1 > start){
+            timeout +=timeoutval;
+        	stack.push(start);
+            stack.push(pivotIndex - 1);
+		}
+        
+        // If there are unsorted elements to the "right" of the pivot,
+        // we add that subarray to the stack so we can sort it later
+        if (pivotIndex + 1 < end){
+            timeout +=timeoutval;
+        	stack.push(pivotIndex + 1);
+            stack.push(end);
+        }
+    }
+    
+    
+    
+    this.updateGreenColor(barChart4, timeout);
 }
 
 function selectionSort(timeoutval) {
@@ -431,4 +487,5 @@ function sortAllAlgorithms() {
     setTimeout(() => insertionSort(10),0);
     setTimeout(() => selectionSort(200),0);
     setTimeout(() => radixSort(10),0);
+    setTimeout(() => quickSort(10), 0);
 }
