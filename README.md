@@ -1,2 +1,2 @@
-# SortingWebsite
+# Comparing Sorting Algorithms
  
