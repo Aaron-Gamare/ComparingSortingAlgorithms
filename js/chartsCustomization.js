@@ -170,17 +170,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //randomize dataset with 100 numbers with range 0 - 1000
 function randomizeDataset() {
-    document.getElementById('bubbletimeoutput').innerHTML = "&nbsp";
-    document.getElementById('mergetimeoutput').innerHTML = "&nbsp";
-    document.getElementById('insertiontimeoutput').innerHTML = "&nbsp";
-    document.getElementById('radixtimeoutput').innerHTML = "&nbsp";
-    document.getElementById('quicktimeoutput').innerHTML = "&nbsp";
-    document.getElementById('selectiontimeoutput').innerHTML = "&nbsp";
+    document.getElementById('bubbletimeoutput').innerHTML = "0";
+    document.getElementById('mergetimeoutput').innerHTML = "0";
+    document.getElementById('insertiontimeoutput').innerHTML = "0";
+    document.getElementById('radixtimeoutput').innerHTML = "0";
+    document.getElementById('quicktimeoutput').innerHTML = "0";
+    document.getElementById('selectiontimeoutput').innerHTML = "0";
+
+    
 
     for (var i = 0; i < timeouts.length; i++) {
         clearTimeout(timeouts[i]);
     }
-    timeouts = [];
+    //timeouts = [];
     mergetimeout = 0;
     mergecounter = 0;
     for(let i = 0; i < 101; i++) {
@@ -210,12 +212,10 @@ function randomizeDataset() {
     barChart3.update();
     barChart4.update();
     barChart5.update();
+    timer.stop();
+    timer.reset();
+    resetTimers();
 }
-
-//upload dataset
-function uploadDataset() {
-
-} 
 
 //called by all sorting functions to update Chart with a set timeout to show animation of moving columns
 function updateChartDelayed(Chart, data, timeout) {
@@ -231,9 +231,57 @@ function updateGreenColor(Chart, timeout) {
         Chart.update();
     }, timeout))
 }
+var bubbleTimer;
+var mergeTimer;
+var insertionTimer;
+var radixTimer;
+var quickTimer;
+var selectionTimer;
+
+function resetTimers() {
+    clearInterval(bubbleTimer);
+    clearInterval(mergeTimer);
+    clearInterval(insertionTimer);
+    clearInterval(radixTimer);
+    clearInterval(quickTimer);
+    clearInterval(selectionTimer);
+
+    bubbleTimer = setInterval(() => {
+        const timeInSeconds = timer.getTime() / 1000;
+        document.getElementById('bubbletimeoutput').innerText = timeInSeconds;
+    }, 25)
+    
+    mergeTimer = setInterval(() => {
+        const timeInSeconds = timer.getTime() / 1000;
+        document.getElementById('mergetimeoutput').innerText = timeInSeconds;
+    }, 25)
+    
+    insertionTimer = setInterval(() => {
+        const timeInSeconds = timer.getTime() / 1000;
+        document.getElementById('insertiontimeoutput').innerText = timeInSeconds;
+    }, 25)
+    
+    radixTimer = setInterval(() => {
+        const timeInSeconds = timer.getTime() / 1000;
+        document.getElementById('radixtimeoutput').innerText = timeInSeconds;
+    }, 25)
+    
+    quickTimer = setInterval(() => {
+        const timeInSeconds = timer.getTime() / 1000;
+        document.getElementById('quicktimeoutput').innerText = timeInSeconds;
+    }, 25)
+    
+    selectionTimer = setInterval(() => {
+        const timeInSeconds = timer.getTime() / 1000;
+        document.getElementById('selectiontimeoutput').innerText = timeInSeconds;
+    }, 25)
+}
 
 
 function bubbleSort(timeoutval) {
+    // document.getElementById('randomize1').disabled = true;
+    // document.getElementById('sort1').disabled = true;
+
     let timeout = 0;
     let barChart0_data = barChart0.data.datasets[0].data;
     for(let i = 0; i < barChart0_data.length; i++) {
@@ -248,6 +296,16 @@ function bubbleSort(timeoutval) {
         }
     }
     updateGreenColor(barChart0, timeout);
+    timeouts.push(setTimeout(function() {clearInterval(bubbleTimer);}, timeout));
+    timeouts.push(setTimeout(() => {
+        const lastTime = timer.getTime() / 1000;
+        document.getElementById('bubbletimeoutput').innerText = lastTime;
+    }, timeout))
+    // timeouts.push(setTimeout(() => {
+    //     document.getElementById('randomize1').disabled = false;
+    //     document.getElementById('sort1').disabled = false;
+    // }, timeout))
+    
 }
 
 
@@ -282,6 +340,11 @@ function merge(left_subarray, right_subarray) {
     }
     if(mergecounter > 99) {
         updateGreenColor(barChart1, mergetimeout);
+        timeouts.push(setTimeout(function() {clearInterval(mergeTimer);}, mergetimeout));
+        timeouts.push(setTimeout(() => {
+            const lastTime = timer.getTime() / 1000;
+            document.getElementById('mergetimeoutput').innerText = lastTime;
+        }, mergetimeout));
     }
     return [ ...temparr, ...left_subarray, ...right_subarray ]
 }
@@ -319,6 +382,11 @@ function insertionSort(timeoutval) {
         
     }  
     updateGreenColor(barChart2, timeout);
+    timeouts.push(setTimeout(function() {clearInterval(insertionTimer);}, timeout));
+    timeouts.push(setTimeout(() => {
+        const lastTime = timer.getTime() / 1000;
+        document.getElementById('insertiontimeoutput').innerText = lastTime;
+    }, timeout))
 }
 
 
@@ -380,6 +448,11 @@ function radixSort(timeoutval) {
         countSort(exp, timeoutval);
     }
     this.updateGreenColor(barChart3, radixtimeout);
+    timeouts.push(setTimeout(function() {clearInterval(radixTimer);}, radixtimeout));
+    timeouts.push(setTimeout(() => {
+        const lastTime = timer.getTime() / 1000;
+        document.getElementById('radixtimeoutput').innerText = lastTime;
+    }, radixtimeout))
 }
 
 function partition(arr, start, end, timeout, timeoutval){
@@ -437,9 +510,12 @@ function quickSort(timeoutval) {
         }
     }
     
-    
-    
     this.updateGreenColor(barChart4, timeout);
+    timeouts.push(setTimeout(function() {clearInterval(quickTimer);}, timeout));
+    timeouts.push(setTimeout(() => {
+        const lastTime = timer.getTime() / 1000;
+        document.getElementById('quicktimeoutput').innerText = lastTime;
+    }, timeout))
 }
 
 function selectionSort(timeoutval) {
@@ -464,16 +540,94 @@ function selectionSort(timeoutval) {
         this.updateChartDelayed(barChart5, barChart5.data.datasets[0].data.slice(0), timeout);
     }
     this.updateGreenColor(barChart5, timeout);
+    timeouts.push(setTimeout(function() {clearInterval(selectionTimer);}, timeout));
+    timeouts.push(setTimeout(() => {
+        const lastTime = timer.getTime() / 1000;
+        document.getElementById('selectiontimeoutput').innerText = lastTime;
+    }, timeout))
 }
 
-function sortAllAlgorithms() {
-    document.getElementById('bubbletimeoutput').innerHTML = "&nbsp";
-    document.getElementById('mergetimeoutput').innerHTML = "&nbsp";
-    document.getElementById('insertiontimeoutput').innerHTML = "&nbsp";
-    document.getElementById('radixtimeoutput').innerHTML = "&nbsp";
-    document.getElementById('quicktimeoutput').innerHTML = "&nbsp";
-    document.getElementById('selectiontimeoutput').innerHTML = "&nbsp";
+
+// function printTime(timerID, output) {
+//     timeouts.push(setTimeout(function() {clearInterval(timerID);}, timeout));
+//     timeouts.push(setTimeout(() => {
+//         const lastTime = timer.getTime() / 1000;
+//         document.getElementById(output).innerText = lastTime;
+//     }, timeout))
+// }
+
+
+class Timer {
+    constructor() {
+      this.isRunning = false;
+      this.startTime = 0;
+      this.overallTime = 0;
+    }
+  
+    _getTimeElapsedSinceLastStart() {
+      if (!this.startTime) {
+        return 0;
+      }
     
+      return Date.now() - this.startTime;
+    }
+  
+    start() {
+      if (this.isRunning) {
+        return console.error('Timer is already running');
+      }
+  
+      this.isRunning = true;
+  
+      this.startTime = Date.now();
+    }
+  
+    stop() {
+      if (!this.isRunning) {
+        return console.error('Timer is already stopped');
+      }
+  
+      this.isRunning = false;
+  
+      this.overallTime = this.overallTime + this._getTimeElapsedSinceLastStart();
+    }
+  
+    reset() {
+      this.overallTime = 0;
+  
+      if (this.isRunning) {
+        this.startTime = Date.now();
+        return;
+      }
+  
+      this.startTime = 0;
+    }
+  
+    getTime() {
+      if (!this.startTime) {
+        return 0;
+      }
+  
+      if (this.isRunning) {
+        return this.overallTime + this._getTimeElapsedSinceLastStart();
+      }
+  
+      return this.overallTime;
+    }
+}
+
+const timer = new Timer();
+  
+function sortAllAlgorithms() {
+    randomizeDataset();
+    document.getElementById('bubbletimeoutput').innerHTML = "0";
+    document.getElementById('mergetimeoutput').innerHTML = "0";
+    document.getElementById('insertiontimeoutput').innerHTML = "0";
+    document.getElementById('radixtimeoutput').innerHTML = "0";
+    document.getElementById('quicktimeoutput').innerHTML = "0";
+    document.getElementById('selectiontimeoutput').innerHTML = "0";
+    
+
     for (var i = 0; i < timeouts.length; i++) {
         clearTimeout(timeouts[i]);
     }
@@ -482,10 +636,14 @@ function sortAllAlgorithms() {
     mergecounter = 0;
     radixtimeout = 0;
     mergeData = JSON.parse(JSON.stringify(barChart1.data.datasets[0].data));
+    
+    timer.start();
+
     setTimeout(() => bubbleSort(10), 0);
     setTimeout(() => mergeSort(mergeData, 10), 0);
     setTimeout(() => insertionSort(10),0);
     setTimeout(() => selectionSort(200),0);
     setTimeout(() => radixSort(10),0);
-    setTimeout(() => quickSort(10), 0);
+    setTimeout(() => quickSort(30), 0);
+
 }
