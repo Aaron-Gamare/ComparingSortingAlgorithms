@@ -279,9 +279,6 @@ function resetTimers() {
 
 
 function bubbleSort(timeoutval) {
-    // document.getElementById('randomize1').disabled = true;
-    // document.getElementById('sort1').disabled = true;
-
     let timeout = 0;
     let barChart0_data = barChart0.data.datasets[0].data;
     for(let i = 0; i < barChart0_data.length; i++) {
@@ -301,11 +298,6 @@ function bubbleSort(timeoutval) {
         const lastTime = timer.getTime() / 1000;
         document.getElementById('bubbletimeoutput').innerText = lastTime;
     }, timeout))
-    // timeouts.push(setTimeout(() => {
-    //     document.getElementById('randomize1').disabled = false;
-    //     document.getElementById('sort1').disabled = false;
-    // }, timeout))
-    
 }
 
 
@@ -363,16 +355,11 @@ function insertionSort(timeoutval) {
     let i, key, j;
     let timeout = 0; 
     let n = barChart2.data.datasets[0].data.length;
-    for (i = 1; i < n; i++) 
-    {  
+    for (i = 1; i < n; i++) {  
         key = barChart2.data.datasets[0].data[i];  
         j = i - 1;  
-  
-        /* Move elements of arr[0..i-1], that are  
-        greater than key, to one position ahead  
-        of their current position */
-        while (j >= 0 && barChart2.data.datasets[0].data[j] > key) 
-        {  
+
+        while (j >= 0 && barChart2.data.datasets[0].data[j] > key) {  
             barChart2.data.datasets[0].data[j + 1] = barChart2.data.datasets[0].data[j];  
             j = j - 1;
             timeout += timeoutval;
@@ -399,9 +386,7 @@ function getMax(arr,n) {
                 mx = arr[i];
         return mx;
 }
- 
-// A function to do counting sort of arr[] according to
-    // the digit represented by exp.
+
 function countSort(exp, timeoutval) {
     let output = new Array(barChart3.data.datasets[0].data.length); // output array
     let i;
@@ -409,41 +394,28 @@ function countSort(exp, timeoutval) {
     for(let i=0;i<10;i++)
         count[i]=0;
 
-    // Store count of occurrences in count[]
     for (i = 0; i < barChart3.data.datasets[0].data.length; i++) {
         count[Math.floor(barChart3.data.datasets[0].data[i] / exp) % 10]++;
     }
-        
-    // Change count[i] so that count[i] now contains
-    // actual position of this digit in output[]
     for (i = 1; i < 10; i++) {
         count[i] += count[i - 1];
     }
     
-    // Build the output array
     for (i = barChart3.data.datasets[0].data.length - 1; i >= 0; i--) {
         output[count[Math.floor(barChart3.data.datasets[0].data[i] / exp) % 10] - 1] = barChart3.data.datasets[0].data[i];
         count[Math.floor(barChart3.data.datasets[0].data[i] / exp) % 10]--;
         radixtimeout += timeoutval;
         this.updateChartDelayed(barChart3, output.slice(0), radixtimeout);
     }
-    // Copy the output array to arr[], so that arr[] now
-    // contains sorted numbers according to current digit
     for (i = 0; i < barChart3.data.datasets[0].data.length; i++) {
         barChart3.data.datasets[0].data[i] = output[i];
     }
 }
- 
-// The main function to that sorts arr[] of size n using
-    // Radix Sort
+
 
 function radixSort(timeoutval) {   
-    // Find the maximum number to know number of digits
     let m = getMax(barChart3.data.datasets[0].data, barChart3.data.datasets[0].data.length);
 
-    // Do counting sort for every digit. Note that
-    // instead of passing digit number, exp is passed.
-    // exp is 10^i where i is current digit number
     for (let exp = 1; Math.floor(m / exp) > 0; exp *= 10) {
         countSort(exp, timeoutval);
     }
@@ -461,48 +433,34 @@ function partition(arr, start, end, timeout, timeoutval){
     let pivotIndex = start; 
     for (let i = start; i < end; i++) {
         if (arr[i] < pivotValue) {
-        // Swapping elements
-        [arr[i], arr[pivotIndex]] = [arr[pivotIndex], arr[i]];
-        // Moving to next element
-        pivotIndex++;
-        
+            [arr[i], arr[pivotIndex]] = [arr[pivotIndex], arr[i]];
+            pivotIndex++;
         }
         timeout += timeoutval;
     }
-    
-    // Putting the pivot value in the middle
     [arr[pivotIndex], arr[end]] = [arr[end], arr[pivotIndex]] 
     return pivotIndex;
 };
 
 function quickSort(timeoutval) {
-    // Creating an array that we'll use as a stack, using the push() and pop() functions
     stack = [];
     let timeout = 0;
-    // Adding the entire initial array as an "unsorted subarray"
     stack.push(0);
     stack.push(barChart4.data.datasets[0].data.length - 1);
     
-    // There isn't an explicit peek() function
-    // The loop repeats as long as we have unsorted subarrays
     while(stack[stack.length - 1] >= 0){
         timeout += timeoutval;
-        // Extracting the top unsorted subarray
     	end = stack.pop();
         start = stack.pop();
         
         pivotIndex = partition(barChart4.data.datasets[0].data, start, end, timeout, timeoutval);
         this.updateChartDelayed(barChart4, barChart4.data.datasets[0].data.slice(0), timeout);
-        // If there are unsorted elements to the "left" of the pivot,
-        // we add that subarray to the stack so we can sort it later
         if (pivotIndex - 1 > start){
             timeout +=timeoutval;
         	stack.push(start);
             stack.push(pivotIndex - 1);
 		}
         
-        // If there are unsorted elements to the "right" of the pivot,
-        // we add that subarray to the stack so we can sort it later
         if (pivotIndex + 1 < end){
             timeout +=timeoutval;
         	stack.push(pivotIndex + 1);
@@ -546,16 +504,6 @@ function selectionSort(timeoutval) {
         document.getElementById('selectiontimeoutput').innerText = lastTime;
     }, timeout))
 }
-
-
-// function printTime(timerID, output) {
-//     timeouts.push(setTimeout(function() {clearInterval(timerID);}, timeout));
-//     timeouts.push(setTimeout(() => {
-//         const lastTime = timer.getTime() / 1000;
-//         document.getElementById(output).innerText = lastTime;
-//     }, timeout))
-// }
-
 
 class Timer {
     constructor() {
